@@ -41,13 +41,13 @@ export class CreateAccountController {
       )
     }
 
-    const hashedPaasword = await hash(password, 8)
+    const hashedPassword = await hash(password, 8)
 
     await this.prisma.user.create({
       data: {
         name,
         email,
-        password: hashedPaasword,
+        password: hashedPassword,
       },
     })
   }
