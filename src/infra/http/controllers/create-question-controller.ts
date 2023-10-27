@@ -4,8 +4,8 @@ import { JwtAuthGuard } from '@/infra/auth/jwt-auth-guard'
 import { UserPayload } from '@/infra/auth/jwt-strategy'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { z } from 'zod'
+import { CreateQuestionUseCase } from '@/domain/forum/application/use-cases/create-question'
 
 const createQuestionBodySchema = z.object({
   title: z.string(),
@@ -17,7 +17,7 @@ type CreateQuestionBodySchema = z.infer<typeof createQuestionBodySchema>
 @Controller('/questions')
 @UseGuards(JwtAuthGuard)
 export class CreateQuestionController {
-  constructor(private prisma: PrismaService) {}
+  constructor(private createQuestionUseCase: CreateQuestionUseCase) {}
 
   @Post()
   @HttpCode(201)
@@ -27,31 +27,13 @@ export class CreateQuestionController {
     @CurrentUser() user: UserPayload,
   ) {
     const { title, content } = body
+    const authorId = user.sub
 
-    const slug = this.convertToSlug(title)
-
-    await this.prisma.question.create({
-      data: {
-        title,
-        slug,
-        content,
-        authorId: user.sub,
-      },
+    await this.createQuestionUseCase.execute({
+      title,
+      content,
+      authorId,
+      attachmentIds: [],
     })
-  }
-
-  private convertToSlug(text: string): string {
-    // Remove diacritics and normalize the string
-    const normalizedString = text
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-
-    // Replace non-alphanumeric characters with hyphens
-    const slug = normalizedString
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '') // Remove leading/trailing hyphens
-
-    return slug
   }
 }
