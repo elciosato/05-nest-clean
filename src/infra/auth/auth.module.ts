@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
-import { AuthenticateController } from '@/controllers/authenticate-controller'
-import { EnvSchema } from '@/env'
-import { PrismaService } from '@/prisma/prisma.service'
+import { AuthenticateController } from '@/infra/http/controllers/authenticate-controller'
+import { PrismaService } from '@/infra/prisma/prisma.service'
 import { JwtStrategy } from './jwt-strategy'
+import { EnvSchema } from '../env'
 
 @Module({
   imports: [
