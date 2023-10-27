@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   postgres:
@@ -10,6 +10,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: docker
       POSTGRES_DB: nest-clean-db
-      PGDATA:  /data/postgres
+      PGDATA: /data/postgres
     volumes:
-      - ./data/pg:/data/postgres
+      - /home/elcio/docker/container/nest-clean-postgres/data/pg:/data/postgres
