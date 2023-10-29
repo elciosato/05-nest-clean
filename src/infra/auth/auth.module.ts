@@ -6,9 +6,14 @@ import { AuthenticateController } from '@/infra/http/controllers/authenticate-co
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { JwtStrategy } from './jwt-strategy'
 import { EnvSchema } from '../env'
+import { DatabaseModule } from '../database/database.module'
+import { CryptographyModule } from '../cryptography/cryptography.module'
+import { AuthenticateStudentUseCase } from '@/domain/forum/application/use-cases/authenticate-student'
 
 @Module({
   imports: [
+    DatabaseModule,
+    CryptographyModule,
     PassportModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
@@ -26,6 +31,6 @@ import { EnvSchema } from '../env'
     }),
   ],
   controllers: [AuthenticateController],
-  providers: [PrismaService, JwtStrategy],
+  providers: [PrismaService, JwtStrategy, AuthenticateStudentUseCase],
 })
 export class AuthModule {}

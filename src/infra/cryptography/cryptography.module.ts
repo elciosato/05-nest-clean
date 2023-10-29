@@ -13,4 +13,4 @@ import { HashGenerator } from '@/domain/forum/application/cryptography/hash-gene
   ],
   exports: [Encrypter, HashComparer, HashGenerator],
 })
-export class Cryptography {}
+export class CryptographyModule {}
